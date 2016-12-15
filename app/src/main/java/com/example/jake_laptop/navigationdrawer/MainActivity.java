@@ -31,7 +31,7 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
+    //just a note
     android.app.FragmentManager fragmentManager = getFragmentManager();
 
     DB_Controller controller;
