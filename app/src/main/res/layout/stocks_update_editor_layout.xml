@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="20dp"
+        android:id="@+id/updateLayout"
+        android:orientation="vertical">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:hint="PRODUCT CODE"
+            android:ems="10"
+            android:textSize="20dp"
+            android:id="@+id/etNewCode" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:hint="PRODUCT NAME"
+            android:ems="10"
+            android:textSize="20dp"
+            android:id="@+id/etNewName" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:hint="UNIT"
+            android:ems="10"
+            android:textSize="20dp"
+            android:id="@+id/etNewUnit" />
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:textColor="#000000"
+                android:text="CATEGORY: "/>
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:spinnerMode="dropdown"
+                android:id="@+id/spinnerNewCategory" />
+        </TableRow>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:hint="CRITICAL LEVEL"
+            android:ems="10"
+            android:textSize="20dp"
+            android:id="@+id/etNewClevel" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:hint="BALANCE"
+            android:ems="10"
+            android:textSize="20dp"
+            android:id="@+id/etNewBal" />
+
+    </LinearLayout>
+
+</ScrollView>

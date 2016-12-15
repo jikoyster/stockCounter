@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.jake_laptop.navigationdrawer">
+
+    <!-- android:label name/title of the app in the system -->
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_stock_counter"
+        android:label="Stock Counter"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <!-- android:label name/title of the app placed with the icon -->
+        <activity
+            android:name=".MainActivity"
+            android:icon="@mipmap/ic_stock_counter"
+            android:label="Stock Counter"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".Notification"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="notification_filter" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

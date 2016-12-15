@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="20dp"
+        android:orientation="vertical">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:hint="PRODUCT CODE"
+            android:ems="10"
+            android:textSize="20dp"
+            android:id="@+id/etCode" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:hint="PRODUCT NAME"
+            android:ems="10"
+            android:textSize="20dp"
+            android:id="@+id/etName" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:hint="UNIT"
+            android:ems="10"
+            android:textSize="20dp"
+            android:id="@+id/etUnit" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:text="SELECT CATEGORY"/>
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:minHeight="35dp"
+            android:id="@+id/spinnerCategory" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:hint="CRITICAL LEVEL"
+            android:ems="10"
+            android:textSize="20dp"
+            android:id="@+id/etCriticalLevel" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:hint="BALANCE"
+            android:ems="10"
+            android:textSize="20dp"
+            android:id="@+id/etBal" />
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TableRow
+                android:padding="10dp"
+                android:background="#eee">
+                <TextView
+                    android:textSize="20dp"
+                    android:text="Date: "/>
+                <TextClock
+                    android:textColor="#666"
+                    android:textSize="20dp"
+                    android:format12Hour="MMMM dd, yyyy h:m a"
+                    android:id="@+id/date_field"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </TableRow>
+        </TableLayout>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="btn_addNewStock"
+            android:id="@+id/btn_addStock"
+            android:text="Save"/>
+
+    </LinearLayout>
+
+</ScrollView>

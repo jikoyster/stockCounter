@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <group
+        android:id="@+id/grp1"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_transactions"
+            android:icon="@drawable/ic_transactions"
+            android:title="Transactions" />
+    </group>
+
+
+    <group
+        android:id="@+id/grp2"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_stocks"
+            android:icon="@drawable/ic_stocks"
+            android:title="Stocks Management" />
+        <item
+            android:id="@+id/nav_newStock"
+            android:icon="@drawable/ic_stock_new"
+            android:title="Add New Stock" />
+    </group>
+
+
+    <group
+        android:id="@+id/grp3"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_category"
+            android:icon="@drawable/ic_category"
+            android:title="Categories" />
+        <item
+            android:id="@+id/nav_newCategory"
+            android:icon="@drawable/ic_category_new"
+            android:title="Add New Category" />
+    </group>
+
+    <!--<item android:title="Stocks Management">-->
+        <!--<menu>-->
+            <!--<item-->
+                <!--android:id="@+id/nav_stocks"-->
+                <!--android:icon="@drawable/ic_stocks"-->
+                <!--android:title="Stocks Management" />-->
+            <!--<item-->
+                <!--android:id="@+id/nav_newStock"-->
+                <!--android:icon="@drawable/ic_stock_new"-->
+                <!--android:title="Add New Stock" />-->
+        <!--</menu>-->
+    <!--</item>-->
+
+    <!--<item android:title="Category Management">-->
+        <!--<menu>-->
+            <!--<item-->
+                <!--android:id="@+id/nav_category"-->
+                <!--android:icon="@drawable/ic_category"-->
+                <!--android:title="Categories" />-->
+            <!--<item-->
+                <!--android:id="@+id/nav_newCategory"-->
+                <!--android:icon="@drawable/ic_category_new"-->
+                <!--android:title="Add New Category" />-->
+        <!--</menu>-->
+    <!--</item>-->
+
+
+
+
+
+
+    <!--<item android:title="Communicate">-->
+        <!--<menu>-->
+            <!--<item-->
+                <!--android:id="@+id/nav_share"-->
+                <!--android:icon="@drawable/ic_menu_share"-->
+                <!--android:title="Share" />-->
+            <!--<item-->
+                <!--android:id="@+id/nav_send"-->
+                <!--android:icon="@drawable/ic_menu_send"-->
+                <!--android:title="Send" />-->
+        <!--</menu>-->
+    <!--</item>-->
+
+</menu>
