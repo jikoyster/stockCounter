@@ -31,7 +31,9 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
+    /* NOTE: -notification and critical level is ok
+            - need to create another layout for critical stocks only
+    */
     android.app.FragmentManager fragmentManager = getFragmentManager();
 
     DB_Controller controller;
