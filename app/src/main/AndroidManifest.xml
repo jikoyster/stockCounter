@@ -5,14 +5,14 @@
     <!-- android:label name/title of the app in the system -->
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_stock_counter"
+        android:icon="@mipmap/ic_text_sctr"
         android:label="Stock Counter"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <!-- android:label name/title of the app placed with the icon -->
         <activity
             android:name=".MainActivity"
-            android:icon="@mipmap/ic_stock_counter"
+            android:icon="@mipmap/ic_text_sctr"
             android:label="Stock Counter"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>

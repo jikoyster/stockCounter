@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity
 
 
         fragmentManager.beginTransaction()
-                .replace(R.id.content_frame,  new StocksFragment())
+                .replace(R.id.content_frame,  new CriticalLevelFragment() )
                 .commit();
 
 
@@ -152,6 +152,13 @@ public class MainActivity extends AppCompatActivity
                         .commit();
 
                 getSupportActionBar().setTitle("Add New Category");
+                break;
+            case R.id.nav_critical_level:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.content_frame,  new CriticalLevelFragment())
+                        .commit();
+
+                getSupportActionBar().setTitle("Displaying CL Stocks");
                 break;
         }
 
