@@ -31,7 +31,11 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
     //just a note
+    /* NOTE: -notification and critical level is ok
+            - need to create another layout for critical stocks only
+    */
     android.app.FragmentManager fragmentManager = getFragmentManager();
 
     DB_Controller controller;
@@ -50,7 +54,7 @@ public class MainActivity extends AppCompatActivity
 
 
         fragmentManager.beginTransaction()
-                .replace(R.id.content_frame,  new StocksFragment())
+                .replace(R.id.content_frame,  new CriticalLevelFragment() )
                 .commit();
 
 
@@ -150,6 +154,13 @@ public class MainActivity extends AppCompatActivity
                         .commit();
 
                 getSupportActionBar().setTitle("Add New Category");
+                break;
+            case R.id.nav_critical_level:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.content_frame,  new CriticalLevelFragment())
+                        .commit();
+
+                getSupportActionBar().setTitle("Displaying CL Stocks");
                 break;
         }
 

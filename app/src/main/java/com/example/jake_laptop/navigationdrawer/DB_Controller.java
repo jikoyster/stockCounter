@@ -12,12 +12,16 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.support.annotation.ColorInt;
 import android.support.v7.app.NotificationCompat;
+import android.text.Layout;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -108,7 +112,7 @@ public class DB_Controller extends SQLiteOpenHelper {
                 );
 
         mBuilder.setContentIntent(resultPendingIntent);
-
+        isNotificActive = true;
         NM.notify(notifID, mBuilder.build());
     }//*********** \showNotification
 
@@ -154,6 +158,33 @@ public class DB_Controller extends SQLiteOpenHelper {
 //            view.append(cursor.getString(1)+"  "+cursor.getString(2)+"\n");
             TableRow row = new TableRow(tableLayout.getContext());
             row.setMinimumHeight(200);
+            row.setLongClickable(true);
+
+            row.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    AlertDialog.Builder innerBuilder = new AlertDialog.Builder(v.getContext());
+                    innerBuilder.setMessage("DELETING THIS RECORD!:\nAre you sure?");
+
+                    final String oldCode = ((Button)v.findViewWithTag("code")).getText().toString();
+                    innerBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            getWritableDatabase().execSQL("DELETE FROM "+ tbl_stocks +" WHERE CODE='"+ oldCode +"';");
+                            displayStocks(tableLayout);
+                        }
+                    });
+                    innerBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+                    innerBuilder.show();
+
+                    return false;
+                }
+            });
 
             //GET AND SET STOCK INFOs
             //CODE
@@ -161,6 +192,7 @@ public class DB_Controller extends SQLiteOpenHelper {
             code.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             code.setText(cursor.getString(0));
             code.setMaxWidth(100);
+            code.setTag("code");
 //            code.setOnClickListener(new Stocks_UpdateDialog( tableLayout.getContext() ));
 
             //NAME
@@ -229,7 +261,7 @@ public class DB_Controller extends SQLiteOpenHelper {
 
                     builder.setView(updateView);
 
-                    builder.setPositiveButton("SAVE", new DialogInterface.OnClickListener() {
+                    builder.setPositiveButton("UPDATE", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             getWritableDatabase().execSQL("UPDATE "+ tbl_stocks +" SET " +
@@ -245,29 +277,7 @@ public class DB_Controller extends SQLiteOpenHelper {
                         }
                     });
 
-                    builder.setNegativeButton("DELETE", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            AlertDialog.Builder innerBuilder = new AlertDialog.Builder(builder.getContext());
-                            innerBuilder.setMessage("Are you sure?");
-                            innerBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    getWritableDatabase().execSQL("DELETE FROM "+ tbl_stocks +" WHERE CODE='"+ oldCode +"';");
-                                    displayStocks(tableLayout);
-                                }
-                            });
-                            innerBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-
-                                }
-                            });
-                            innerBuilder.show();
-                        }
-                    });//builder.setNegativeButton
-
-                    builder.setNeutralButton("NEW TRANSACTION", new DialogInterface.OnClickListener() {
+                    builder.setNegativeButton("NEW TRANSACTION", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             AlertDialog.Builder tBuilder = new AlertDialog.Builder(builder.getContext());
@@ -297,7 +307,7 @@ public class DB_Controller extends SQLiteOpenHelper {
 
                             //get RadioButton value on submit
                             final RadioGroup radioGroup = (RadioGroup)transactionView.findViewById(R.id.trans_type_group);
-                                radioGroup.check(R.id.OUT);
+                            radioGroup.check(R.id.OUT);
 
                             tBuilder.setPositiveButton("SUBMIT", new DialogInterface.OnClickListener() {
                                 @Override
@@ -335,15 +345,16 @@ public class DB_Controller extends SQLiteOpenHelper {
 
                             tBuilder.show();
                         }
-                    });//builder.setNeutralButton
+                    });//builder.setNegativeButton
 
-                    CharSequence[] cs = {new String("X CLOSE")};
-                    builder.setItems(cs, new DialogInterface.OnClickListener() {
+                    builder.setNeutralButton("CANCEL", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
 
                         }
-                    });//builder.setItems
+                    });//builder.setNeutralButton
+
+
 
                     builder.show();
                 }// onClick()
@@ -800,5 +811,161 @@ public class DB_Controller extends SQLiteOpenHelper {
 
             intID++;
         }//endwhile
+    }
+
+
+/********** NOTIFICATION - PRODUCTS THAT REACH CRITICAL LEVEL ***********************************************/
+    public void displayCLStocks(final TableLayout tableLayout) {
+        tableLayout.removeAllViews();
+        Cursor cursor = this.getReadableDatabase().rawQuery("SELECT * FROM "+ tbl_stocks +" WHERE BALANCE <= CRITICAL_LEVEL ORDER BY NAME ASC ;", null);
+//        view.setText("");
+        setStockHeader(tableLayout);
+
+        int intID = 0;
+        while(cursor.moveToNext()){
+//            view.append(cursor.getString(1)+"  "+cursor.getString(2)+"\n");
+            TableRow row = new TableRow(tableLayout.getContext());
+            row.setMinimumHeight(200);
+
+            //GET AND SET STOCK INFOs
+            //CODE
+            final Button code = new Button(tableLayout.getContext());
+            code.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            code.setText(cursor.getString(0));
+            code.setMaxWidth(100);
+//            code.setOnClickListener(new Stocks_UpdateDialog( tableLayout.getContext() ));
+
+            //NAME
+            TextView name = new TextView(tableLayout.getContext());
+            name.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
+            name.setMaxWidth(200);
+            name.setTypeface(null, Typeface.BOLD);
+            name.setTextSize(16);
+            name.setText(cursor.getString(1));
+
+            //UNIT
+            TextView unit = new TextView(tableLayout.getContext());
+            unit.setMaxWidth(80);
+            unit.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
+            unit.setText(cursor.getString(2));
+
+            //CRITICAL LEVEL
+            TextView critcalLevel = new TextView(tableLayout.getContext());
+            critcalLevel.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            critcalLevel.setTextColor(Color.parseColor("#990000"));
+            critcalLevel.setTextSize(16);
+            critcalLevel.setTypeface(null, Typeface.BOLD);
+            critcalLevel.setText( cursor.getString(4) );
+
+            //BAL
+            TextView bal = new TextView(tableLayout.getContext());
+            bal.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            bal.setTextColor(Color.parseColor("#009900"));
+            bal.setTextSize(16);
+            bal.setTypeface(null, Typeface.BOLD);
+            bal.setText( cursor.getString(5) );
+
+            /* code set setOnClickListener */
+            code.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final String oldCode = ((Button) v).getText().toString();
+                    final String name = getValueFromColumn("NAME", oldCode);
+                    final String unit = getValueFromColumn("UNIT", oldCode);
+                    String strCat = "0";
+                    strCat = getValueFromColumn("CATEGORY", oldCode);
+                    final int category = Integer.parseInt(strCat);
+                    final String cLevel = getValueFromColumn("CRITICAL_LEVEL", oldCode);
+                    final String bal = getValueFromColumn("BALANCE", oldCode);
+
+                    final AlertDialog.Builder tBuilder = new AlertDialog.Builder(v.getContext());
+                    tBuilder.setTitle("New Transaction");
+
+
+                    LayoutInflater inflater = LayoutInflater.from(v.getContext());
+                    final View transactionView = inflater.inflate(R.layout.transactions_new_editor_layout, null);
+
+                    TextView pcode = (TextView) transactionView.findViewById(R.id.trans_PCode);
+                    pcode.setText(oldCode);
+                    //type no needed to display by default
+                    TextView curBal = (TextView) transactionView.findViewById(R.id.curBal);
+                    curBal.setTextColor(Color.parseColor("#009900"));
+                    curBal.setText("BALANCE: " + bal);
+
+                    EditText quantity = (EditText) transactionView.findViewById(R.id.trans_quantity);
+                    quantity.setText("");
+
+                    tBuilder.setView(transactionView);
+
+
+                    final String trans_PCode = ((TextView) transactionView.findViewById(R.id.trans_PCode)).getText().toString();
+//                            String strQty = ((EditText)transactionView.findViewById(R.id.trans_quantity)).getText().toString();
+//                            final int trans_quantity = Integer.parseInt(strQty);
+                    final String trans_date = ((TextClock) transactionView.findViewById(R.id.trans_date)).getText().toString();
+
+                    //get RadioButton value on submit
+                    final RadioGroup radioGroup = (RadioGroup) transactionView.findViewById(R.id.trans_type_group);
+                    radioGroup.check(R.id.OUT);
+
+                    tBuilder.setPositiveButton("SUBMIT", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which)
+                                throws NullPointerException {
+                            int checkedId = radioGroup.getCheckedRadioButtonId();
+                            String trans_date = ((TextClock) transactionView.findViewById(R.id.trans_date)).getText().toString();
+                            String strQty = ((EditText) transactionView.findViewById(R.id.trans_quantity)).getText().toString();
+                            int trans_quantity = Integer.parseInt(strQty);
+                            String trans_type = ((RadioButton) transactionView.findViewById(checkedId)).getText().toString();
+
+                            System.out.println(trans_PCode);
+                            System.out.println("rg: " + trans_type);
+                            System.out.println("1st: " + trans_quantity);
+                            System.out.println("DATE: " + trans_date);
+
+                            String insertTransactionSQL = "INSERT INTO " + tbl_transactions + "" +
+                                    "(STOCK, TYPE, QUANTITY, DATE)" +
+                                    "VALUES ('" + trans_PCode + "', '" + trans_type + "', " + trans_quantity + ", '" + trans_date + "');";
+
+                            getWritableDatabase().execSQL(insertTransactionSQL);
+
+
+                            udpateStockBalance(transactionView, trans_PCode, trans_type, trans_quantity);
+                            int newBal = Integer.parseInt( getValueFromColumn("BALANCE", trans_PCode) );
+                            if (!checkSTockCriticalLevel(trans_PCode,newBal)){
+                                NM.cancel(notifID);
+                            }
+                            displayCLStocks(tableLayout);
+                        }
+
+                    });
+
+                    tBuilder.show();
+                        /* \setPositiveButton */
+                    } // \setPositiveButton
+
+            });/* \code.setOnClickListener(new View.OnClickListener() { */
+
+            row.addView(code);
+            row.addView(name);
+            row.addView(unit);
+            row.addView(critcalLevel);
+            row.addView(bal);
+            tableLayout.addView( row );
+
+
+            intID++;
+        }//endwhile
+
+        if (intID == 0){
+            TextView noDisp = new TextView(tableLayout.getContext());
+            noDisp.setTextSize(20);
+            noDisp.setText("No Critical Level Stocks");
+            noDisp.setMinimumHeight(LinearLayout.LayoutParams.MATCH_PARENT);
+            noDisp.setMinimumWidth(LinearLayout.LayoutParams.MATCH_PARENT);
+            noDisp.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            noDisp.setPadding(0,30,0,0);
+
+            tableLayout.addView(noDisp);
+        }
     }
 }//endClass

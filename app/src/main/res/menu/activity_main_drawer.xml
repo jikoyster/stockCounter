@@ -42,6 +42,16 @@
             android:title="Add New Category" />
     </group>
 
+    <group
+        android:id="@+id/grp4"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_critical_level"
+            android:icon="@drawable/ic_critical_level"
+            android:title="Stocks in Critical Level" />
+    </group>
+
     <!--<item android:title="Stocks Management">-->
         <!--<menu>-->
             <!--<item-->
