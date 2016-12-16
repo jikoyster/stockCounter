@@ -21,6 +21,9 @@
 
             <!-- setTransactionsHeader() on DB_Controller -->
         </TableLayout>
+
     </ScrollView>
+
+
 
 </LinearLayout>

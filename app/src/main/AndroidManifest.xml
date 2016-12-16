@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.jake_laptop.navigationdrawer">
 
+    <uses-permission android:name="android.permission.CAMERA"></uses-permission>
+
     <!-- android:label name/title of the app in the system -->
     <application
         android:allowBackup="true"

@@ -32,10 +32,6 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    //just a note
-    /* NOTE: -notification and critical level is ok
-            - need to create another layout for critical stocks only
-    */
     android.app.FragmentManager fragmentManager = getFragmentManager();
 
     DB_Controller controller;
@@ -53,9 +49,9 @@ public class MainActivity extends AppCompatActivity
         DB_Controller.NM = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
 
-        fragmentManager.beginTransaction()
-                .replace(R.id.content_frame,  new CriticalLevelFragment() )
-                .commit();
+//        fragmentManager.beginTransaction()
+//                .replace(R.id.content_frame,  new CriticalLevelFragment() )
+//                .commit();
 
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -123,6 +119,14 @@ public class MainActivity extends AppCompatActivity
                                 new TransactionsFragment())
                         .commit();
                 getSupportActionBar().setTitle("Transactions");
+
+                break;
+            case R.id.nav_newTransactions:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.content_frame,
+                                new TransactionsNewFragment())
+                        .commit();
+                getSupportActionBar().setTitle("New Transaction");
 
                 break;
             case R.id.nav_stocks:

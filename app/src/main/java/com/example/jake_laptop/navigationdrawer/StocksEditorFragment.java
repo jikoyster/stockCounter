@@ -29,15 +29,6 @@ public class StocksEditorFragment extends Fragment {
         controller = new DB_Controller(myView.getContext(), "", null, 1);
         loadCategories();
 
-        ImageButton btn_camera = (ImageButton)myView.findViewById(R.id.btn_camera);
-        btn_camera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openCamera();
-            }
-        });
-
-
         return myView;
     }
 

@@ -12,11 +12,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.support.annotation.ColorInt;
 import android.support.v7.app.NotificationCompat;
-import android.text.Layout;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -29,9 +26,6 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextClock;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -151,7 +145,7 @@ public class DB_Controller extends SQLiteOpenHelper {
         tableLayout.removeAllViews();
         Cursor cursor = this.getReadableDatabase().rawQuery("SELECT * FROM "+ tbl_stocks +" ORDER BY NAME ASC ;", null);
 //        view.setText("");
-        setStockHeader(tableLayout);
+//        setStockHeader(tableLayout);
 
         int intID = 0;
         while(cursor.moveToNext()){
@@ -162,7 +156,9 @@ public class DB_Controller extends SQLiteOpenHelper {
 
             row.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
-                public boolean onLongClick(View v) {
+                public boolean onLongClick(final View v) {
+                    v.setBackgroundColor(Color.LTGRAY);
+
                     AlertDialog.Builder innerBuilder = new AlertDialog.Builder(v.getContext());
                     innerBuilder.setMessage("DELETING THIS RECORD!:\nAre you sure?");
 
@@ -177,7 +173,7 @@ public class DB_Controller extends SQLiteOpenHelper {
                     innerBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-
+                            v.setBackgroundColor(Color.WHITE);
                         }
                     });
                     innerBuilder.show();
@@ -186,40 +182,50 @@ public class DB_Controller extends SQLiteOpenHelper {
                 }
             });
 
-            //GET AND SET STOCK INFOs
+            //GET AND SET STOCK INFOs to Stocks Management Layout
             //CODE
+            TextView lblCode = new TextView(tableLayout.getContext());
+            lblCode.setText("Code: ");
             final Button code = new Button(tableLayout.getContext());
             code.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            code.setWidth(LinearLayout.LayoutParams.MATCH_PARENT);
             code.setText(cursor.getString(0));
-            code.setMaxWidth(100);
             code.setTag("code");
 //            code.setOnClickListener(new Stocks_UpdateDialog( tableLayout.getContext() ));
 
             //NAME
+            TextView lblName = new TextView(tableLayout.getContext());
+            lblName.setText("Name: ");
             TextView name = new TextView(tableLayout.getContext());
             name.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
-            name.setMaxWidth(200);
+//            name.setMaxWidth(200);
             name.setTypeface(null, Typeface.BOLD);
             name.setTextSize(16);
             name.setText(cursor.getString(1));
 
             //UNIT
+            TextView lblUnit = new TextView(tableLayout.getContext());
+            lblUnit.setText("Unit: ");
             TextView unit = new TextView(tableLayout.getContext());
-            unit.setMaxWidth(80);
+//            unit.setMaxWidth(80);
             unit.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
             unit.setText(cursor.getString(2));
 
             //CRITICAL LEVEL
+            TextView lblcritcalLevel = new TextView(tableLayout.getContext());
+            lblcritcalLevel.setText("Critical Level: ");
             TextView critcalLevel = new TextView(tableLayout.getContext());
-            critcalLevel.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            critcalLevel.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
             critcalLevel.setTextColor(Color.parseColor("#990000"));
             critcalLevel.setTextSize(16);
             critcalLevel.setTypeface(null, Typeface.BOLD);
             critcalLevel.setText( cursor.getString(4) );
 
             //BAL
+            TextView lblBal = new TextView(tableLayout.getContext());
+            lblBal.setText("Balance: ");
             TextView bal = new TextView(tableLayout.getContext());
-            bal.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            bal.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
             bal.setTextColor(Color.parseColor("#009900"));
             bal.setTextSize(16);
             bal.setTypeface(null, Typeface.BOLD);
@@ -324,14 +330,9 @@ public class DB_Controller extends SQLiteOpenHelper {
                                     System.out.println("1st: "+trans_quantity);
                                     System.out.println("DATE: "+trans_date);
 
-                                    String insertTransactionSQL = "INSERT INTO "+tbl_transactions+"" +
-                                            "(STOCK, TYPE, QUANTITY, DATE)" +
-                                            "VALUES ('"+trans_PCode+"', '"+trans_type+"', "+trans_quantity+", '"+trans_date+"');";
+                                    add_newTransaction(trans_PCode, trans_type, trans_quantity, trans_date);
 
-                                    getWritableDatabase().execSQL(insertTransactionSQL);
-
-
-                                    udpateStockBalance(transactionView, trans_PCode, trans_type, trans_quantity);
+                                    updateStockBalance(transactionView, trans_PCode, trans_type, trans_quantity);
                                     displayStocks(tableLayout);
                                 }
                             });//tBuilder.setPositiveButton
@@ -364,20 +365,55 @@ public class DB_Controller extends SQLiteOpenHelper {
 
             /* \set setOnClickListener */
 
+            row.setPadding(0,30,0,0);
+            row.addView(lblCode);
             row.addView(code);
-            row.addView(name);
-            row.addView(unit);
-            row.addView(critcalLevel);
-            row.addView(bal);
+
+            TableRow row2 = new TableRow(tableLayout.getContext());
+            row2.addView(lblName);
+            row2.addView(name);
+
+            TableRow row3 = new TableRow(tableLayout.getContext());
+            row3.addView(lblUnit);
+            row3.addView(unit);
+
+            TableRow row4 = new TableRow(tableLayout.getContext());
+            row4.addView(lblcritcalLevel);
+            row4.addView(critcalLevel);
+
+            TableRow row5 = new TableRow(tableLayout.getContext());
+            row5.setPadding(0,0,0,30);
+            row5.addView(lblBal);
+            row5.addView(bal);
+
+
+            TextView Hline = new TextView(tableLayout.getContext());
+            Hline.setMinWidth(LinearLayout.LayoutParams.MATCH_PARENT);
+            Hline.setMaxHeight(1);
+            Hline.setBackgroundColor(Color.LTGRAY);
+
             tableLayout.addView( row );
+            tableLayout.addView( row2 );
+            tableLayout.addView( row3 );
+            tableLayout.addView( row4 );
+            tableLayout.addView( row5 );
+            tableLayout.addView( Hline );
 
 
             intID++;
         }//endwhile
     }
 
-    private void udpateStockBalance(View trasactionView,String trans_PCode, String trans_type, int trans_qty) {
-        System.out.println("---------udpateStockBalance---");
+    public void add_newTransaction(String trans_PCode, String trans_type, int trans_quantity, String trans_date){
+        String insertTransactionSQL = "INSERT INTO "+tbl_transactions+"" +
+                "(STOCK, TYPE, QUANTITY, DATE)" +
+                "VALUES ('"+trans_PCode+"', '"+trans_type+"', "+trans_quantity+", '"+trans_date+"');";
+
+        getWritableDatabase().execSQL(insertTransactionSQL);
+    }
+
+    public void updateStockBalance(View trasactionView, String trans_PCode, String trans_type, int trans_qty) {
+        System.out.println("---------updateStockBalance---");
         int stockBal = Integer.parseInt( getValueFromColumn("BALANCE",trans_PCode) );
         int newBal = 0;
 
@@ -707,29 +743,42 @@ public class DB_Controller extends SQLiteOpenHelper {
         tableLayout.removeAllViews();
         Cursor cursor = this.getReadableDatabase().rawQuery("SELECT * FROM "+ tbl_transactions +" ORDER BY ID DESC;", null);
 //        view.setText("");
-        setTransactionsHeader(tableLayout);
+//        setTransactionsHeader(tableLayout);
 
         int intID = 0;
         while(cursor.moveToNext()){
 //            view.append(cursor.getString(1)+"  "+cursor.getString(2)+"\n");
             TableRow row = new TableRow(tableLayout.getContext());
-            row.setMinimumHeight(200);
 
             //GET AND SET STOCK INFOs
             //ID
+            TextView lblID = new TextView(tableLayout.getContext());
+            lblID.setText("Transaction ID");
             Button ID = new Button(tableLayout.getContext());
             ID.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             ID.setText(cursor.getString(0));
             ID.setMaxWidth(70);
 
             //STOCK
+            TextView lblStock = new TextView(tableLayout.getContext());
+            lblStock.setText("Stock");
             TextView STOCK = new TextView(tableLayout.getContext());
             STOCK.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
             STOCK.setTypeface(null, Typeface.BOLD);
             STOCK.setTextSize(16);
             STOCK.setText(cursor.getString(1));
+            //NAME
+            TextView lblStockName = new TextView(tableLayout.getContext());
+            lblStockName.setText("Name");
+            TextView NAME = new TextView(tableLayout.getContext());
+            NAME.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
+            NAME.setTypeface(null, Typeface.BOLD);
+            NAME.setTextSize(16);
+            NAME.setText( getValueFromColumn("NAME", cursor.getString(1)) );
 
             //TYPE
+            TextView lblType = new TextView(tableLayout.getContext());
+            lblType.setText("Type");
             TextView TYPE = new TextView(tableLayout.getContext());
             TYPE.setMaxWidth(80);
             TYPE.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
@@ -737,8 +786,10 @@ public class DB_Controller extends SQLiteOpenHelper {
             TYPE.setText(strType);
 
             //QTY
+            TextView lblQty = new TextView(tableLayout.getContext());
+            lblQty.setText("Qty");
             TextView QTY = new TextView(tableLayout.getContext());
-            QTY.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            QTY.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
             String qtyColor = (strType.equals("OUT"))? "#990000" : "#009900";
             QTY.setTextColor(Color.parseColor(qtyColor));
             QTY.setTextSize(16);
@@ -746,8 +797,10 @@ public class DB_Controller extends SQLiteOpenHelper {
             QTY.setText( cursor.getString(3) );
 
             //DATE
+            TextView lblDate = new TextView(tableLayout.getContext());
+            lblDate.setText("Date");
             TextView DATE = new TextView(tableLayout.getContext());
-            DATE.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_END);
+            DATE.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
             DATE.setTextSize(16);
             DATE.setText( cursor.getString(4) );
 
@@ -801,12 +854,44 @@ public class DB_Controller extends SQLiteOpenHelper {
 
             /* \set setOnClickListener */
 
+            row.setPadding(0,30,0,0);
+            row.addView(lblID);
             row.addView(ID);
-            row.addView(STOCK);
-            row.addView(TYPE);
-            row.addView(QTY);
-            row.addView(DATE);
+
+
+            TableRow row2 = new TableRow(tableLayout.getContext());
+            row2.addView(lblStock);
+            row2.addView(STOCK);
+            TableRow row2_1 = new TableRow(tableLayout.getContext());
+            row2_1.addView(lblStockName);
+            row2_1.addView(NAME);
+
+            TableRow row3 = new TableRow(tableLayout.getContext());
+            row3.addView(lblType);
+            row3.addView(TYPE);
+
+            TableRow row4 = new TableRow(tableLayout.getContext());
+            row4.addView(lblQty);
+            row4.addView(QTY);
+
+            TableRow row5 = new TableRow(tableLayout.getContext());
+            row5.addView(lblDate);
+            row5.addView(DATE);
+            row5.setPadding(0,0,0,30);
+
+            TextView Hline = new TextView(tableLayout.getContext());
+            Hline.setMinWidth(LinearLayout.LayoutParams.MATCH_PARENT);
+            Hline.setMaxHeight(1);
+            Hline.setBackgroundColor(Color.LTGRAY);
+
+
             tableLayout.addView( row );
+            tableLayout.addView( row2 );
+            tableLayout.addView( row2_1 );
+            tableLayout.addView( row3 );
+            tableLayout.addView( row4 );
+            tableLayout.addView( row5 );
+            tableLayout.addView( Hline );
 
 
             intID++;
@@ -819,49 +904,64 @@ public class DB_Controller extends SQLiteOpenHelper {
         tableLayout.removeAllViews();
         Cursor cursor = this.getReadableDatabase().rawQuery("SELECT * FROM "+ tbl_stocks +" WHERE BALANCE <= CRITICAL_LEVEL ORDER BY NAME ASC ;", null);
 //        view.setText("");
-        setStockHeader(tableLayout);
+//        setStockHeader(tableLayout);
 
         int intID = 0;
         while(cursor.moveToNext()){
 //            view.append(cursor.getString(1)+"  "+cursor.getString(2)+"\n");
             TableRow row = new TableRow(tableLayout.getContext());
-            row.setMinimumHeight(200);
+//            row.setMinimumHeight(200);
 
             //GET AND SET STOCK INFOs
             //CODE
+            TextView lblCode = new TextView(tableLayout.getContext());
+            lblCode.setText("Code");
             final Button code = new Button(tableLayout.getContext());
             code.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             code.setText(cursor.getString(0));
             code.setMaxWidth(100);
+            code.setPadding(30,0,0,0);
 //            code.setOnClickListener(new Stocks_UpdateDialog( tableLayout.getContext() ));
 
             //NAME
+            TextView lblName = new TextView(tableLayout.getContext());
+            lblName.setText("Name");
             TextView name = new TextView(tableLayout.getContext());
             name.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
             name.setMaxWidth(200);
             name.setTypeface(null, Typeface.BOLD);
+            name.setPadding(30,0,0,0);
             name.setTextSize(16);
             name.setText(cursor.getString(1));
 
             //UNIT
+            TextView lblUnit = new TextView(tableLayout.getContext());
+            lblUnit.setText("Unit");
             TextView unit = new TextView(tableLayout.getContext());
             unit.setMaxWidth(80);
+            unit.setPadding(30,0,0,0);
             unit.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
             unit.setText(cursor.getString(2));
 
             //CRITICAL LEVEL
+            TextView lblCriticalLevel = new TextView(tableLayout.getContext());
+            lblCriticalLevel.setText("Critical Level");
             TextView critcalLevel = new TextView(tableLayout.getContext());
-            critcalLevel.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            critcalLevel.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
             critcalLevel.setTextColor(Color.parseColor("#990000"));
             critcalLevel.setTextSize(16);
+            critcalLevel.setPadding(30,0,0,0);
             critcalLevel.setTypeface(null, Typeface.BOLD);
             critcalLevel.setText( cursor.getString(4) );
 
             //BAL
+            TextView lblBalance = new TextView(tableLayout.getContext());
+            lblBalance.setText("Balance");
             TextView bal = new TextView(tableLayout.getContext());
-            bal.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            bal.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
             bal.setTextColor(Color.parseColor("#009900"));
             bal.setTextSize(16);
+            bal.setPadding(30,0,0,0);
             bal.setTypeface(null, Typeface.BOLD);
             bal.setText( cursor.getString(5) );
 
@@ -929,7 +1029,7 @@ public class DB_Controller extends SQLiteOpenHelper {
                             getWritableDatabase().execSQL(insertTransactionSQL);
 
 
-                            udpateStockBalance(transactionView, trans_PCode, trans_type, trans_quantity);
+                            updateStockBalance(transactionView, trans_PCode, trans_type, trans_quantity);
                             int newBal = Integer.parseInt( getValueFromColumn("BALANCE", trans_PCode) );
                             if (!checkSTockCriticalLevel(trans_PCode,newBal)){
                                 NM.cancel(notifID);
@@ -945,12 +1045,40 @@ public class DB_Controller extends SQLiteOpenHelper {
 
             });/* \code.setOnClickListener(new View.OnClickListener() { */
 
+
+            row.addView(lblCode);
             row.addView(code);
-            row.addView(name);
-            row.addView(unit);
-            row.addView(critcalLevel);
-            row.addView(bal);
+            row.setPadding(0,30,0,0);
+
+            TableRow row2 = new TableRow(tableLayout.getContext());
+            row2.addView(lblName);
+            row2.addView(name);
+
+            TableRow row3 = new TableRow(tableLayout.getContext());
+            row3.addView(lblUnit);
+            row3.addView(unit);
+
+            TableRow row4 = new TableRow(tableLayout.getContext());
+            row4.addView(lblCriticalLevel);
+            row4.addView(critcalLevel);
+
+            TableRow row5 = new TableRow(tableLayout.getContext());
+            row5.addView(lblBalance);
+            row5.addView(bal);
+            row5.setPadding(0,0,0,30);
+
+            TextView Hline = new TextView(tableLayout.getContext());
+            Hline.setMinWidth(LinearLayout.LayoutParams.MATCH_PARENT);
+            Hline.setMaxHeight(1);
+            Hline.setBackgroundColor(Color.LTGRAY);
+
             tableLayout.addView( row );
+            tableLayout.addView( row2 );
+            tableLayout.addView( row3 );
+            tableLayout.addView( row4 );
+            tableLayout.addView( row5 );
+            tableLayout.addView( Hline );
+
 
 
             intID++;
