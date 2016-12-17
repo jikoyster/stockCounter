@@ -12,7 +12,7 @@ import android.widget.TableLayout;
  * Created by Jake-LAPTOP on 12/2/2016.
  */
 
-public class CategoryFragment extends Fragment {
+public class CategoryNDestinationFragment extends Fragment {
 
     DB_Controller controller;
     View myView;
@@ -20,11 +20,13 @@ public class CategoryFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        myView = inflater.inflate(R.layout.category_layout, container, false);
+        myView = inflater.inflate(R.layout.category_and_destination_layout, container, false);
         controller = new DB_Controller( myView.getContext(), "", null, 1);
 
-        TableLayout layout = (TableLayout) myView.findViewById(R.id.category_layout);
-        controller.displayCategories(layout);
+        TableLayout layoutCat = (TableLayout) myView.findViewById(R.id.category_layout);
+        TableLayout layoutDest = (TableLayout) myView.findViewById(R.id.destination_layout);
+
+        controller.displayCatNDest(layoutCat, layoutDest);
         return myView;
     }
 }

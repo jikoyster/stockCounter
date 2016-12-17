@@ -47,7 +47,21 @@
             android:layout_height="wrap_content"
             android:textSize="20dp"
             android:minHeight="35dp"
+            android:background="#CCCCCC"
             android:id="@+id/spinnerCategory" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:text="SELECT DESTINATION"/>
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:minHeight="35dp"
+            android:background="#DDDDDD"
+            android:id="@+id/spinnerDestination" />
 
         <EditText
             android:layout_width="match_parent"
@@ -69,13 +83,12 @@
 
         <TableLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:stretchColumns="1">
             <TableRow
                 android:padding="10dp"
                 android:background="#eee">
-                <TextView
-                    android:textSize="20dp"
-                    android:text="Date: "/>
+
                 <TextClock
                     android:textColor="#666"
                     android:textSize="20dp"
@@ -83,6 +96,7 @@
                     android:id="@+id/date_field"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
+
             </TableRow>
         </TableLayout>
 

@@ -28,6 +28,7 @@ public class StocksEditorFragment extends Fragment {
         myView = inflater.inflate(R.layout.stocks_new_editor_layout, container, false);
         controller = new DB_Controller(myView.getContext(), "", null, 1);
         loadCategories();
+        loadDestinations();
 
         return myView;
     }
@@ -45,9 +46,17 @@ public class StocksEditorFragment extends Fragment {
         spinnerCategory.setAdapter(dataAdapter);
     }//loadCategories
 
-    private void openCamera() {
-        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-        startActivity(intent);
-    }
+    public void loadDestinations(){
+        Spinner spinnerDestination = (Spinner) myView.findViewById(R.id.spinnerDestination);
+
+        List<String> labels = controller.populateDestinations();
+        // Creating adapter for spinner
+        ArrayAdapter<String> dataAdapter =
+                new ArrayAdapter<String>(myView.getContext(),android.R.layout.simple_spinner_item, labels);
+        // Drop down layout style - list view with radio button
+        dataAdapter.setDropDownViewResource(android.R.layout.select_dialog_item);//simple_spinner_dropdown_item);
+
+        spinnerDestination.setAdapter(dataAdapter);
+    }//loadCategories
 
 }//endClass

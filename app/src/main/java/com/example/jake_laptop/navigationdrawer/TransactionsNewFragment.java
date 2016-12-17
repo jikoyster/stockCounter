@@ -16,6 +16,7 @@ import android.widget.RadioGroup;
 import android.widget.TableLayout;
 import android.widget.TextClock;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 /**
@@ -37,6 +38,10 @@ public class TransactionsNewFragment extends Fragment {
         final EditText ETtrans_PCode = (EditText) myView.findViewById(R.id.trans_PCode);
         final String trans_PCode = ETtrans_PCode.getText().toString();
         Button btn_trans_submit = (Button) myView.findViewById(R.id.btn_trans_submit);
+
+        //bal default value
+        TextView trans_curBal = (TextView)myView.findViewById(R.id.trans_curBal);
+        trans_curBal.setText("0");
 
         ETtrans_PCode.addTextChangedListener(new TextWatcher() {
             @Override
@@ -62,16 +67,30 @@ public class TransactionsNewFragment extends Fragment {
         btn_trans_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String trans_PCode = ((EditText)myView.findViewById(R.id.trans_PCode)).getText().toString();
-                RadioGroup radioGroup = (RadioGroup)myView.findViewById(R.id.trans_type_group);
-                int checkedId = radioGroup.getCheckedRadioButtonId();
-                String trans_type = ((RadioButton)myView.findViewById(checkedId)).getText().toString();
-                String strQty = ((EditText)myView.findViewById(R.id.trans_quantity)).getText().toString();
-                int trans_quantity = Integer.parseInt(strQty);
-                final String trans_date = ((TextClock)myView.findViewById(R.id.trans_date)).getText().toString();
+            String trans_type = null;
+            int trans_quantity = -1;
+
+            EditText ETtrans_PCode = (EditText) myView.findViewById(R.id.trans_PCode);
+            String trans_PCode = ETtrans_PCode.getText().toString();
+
+            RadioGroup radioGroup = (RadioGroup)myView.findViewById(R.id.trans_type_group);
+            int checkedId = radioGroup.getCheckedRadioButtonId();
+            trans_type = ((RadioButton)myView.findViewById(checkedId)).getText().toString();
+
+            String strQty = ((EditText) myView.findViewById(R.id.trans_quantity)).getText().toString();
+            trans_quantity = Integer.parseInt(strQty);
+
+            final String trans_date = ((TextClock)myView.findViewById(R.id.trans_date)).getText().toString();
+
+                System.out.println(trans_PCode);
+                System.out.println(trans_type);
+                System.out.println(trans_quantity);
+                System.out.println(trans_date);
 
                 controller.add_newTransaction(trans_PCode, trans_type, trans_quantity, trans_date);
                 controller.updateStockBalance(myView, trans_PCode, trans_type, trans_quantity);
+
+                Toast.makeText(myView.getContext(), "Transaction Recorded!", Toast.LENGTH_SHORT).show();
             }
         });
 

@@ -145,12 +145,12 @@ public class MainActivity extends AppCompatActivity
 
                 getSupportActionBar().setTitle("Add New Stock");
                 break;
-            case R.id.nav_category:
+            case R.id.nav_catNdest:
                 fragmentManager.beginTransaction()
-                        .replace(R.id.content_frame,  new CategoryFragment())
+                        .replace(R.id.content_frame,  new CategoryNDestinationFragment())
                         .commit();
 
-                getSupportActionBar().setTitle("Category");
+                getSupportActionBar().setTitle("Categories & Destinations");
                 break;
             case R.id.nav_newCategory:
                 fragmentManager.beginTransaction()
@@ -158,6 +158,13 @@ public class MainActivity extends AppCompatActivity
                         .commit();
 
                 getSupportActionBar().setTitle("Add New Category");
+                break;
+            case R.id.nav_newDestination:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.content_frame,  new DestinationEditorFragment())
+                        .commit();
+
+                getSupportActionBar().setTitle("Add New Destination");
                 break;
             case R.id.nav_critical_level:
                 fragmentManager.beginTransaction()
@@ -237,10 +244,11 @@ public class MainActivity extends AppCompatActivity
                 stockName   = ((EditText) findViewById(R.id.etName)).getText().toString(),
                 unit        = ((EditText) findViewById(R.id.etUnit)).getText().toString(),
                 date        = ((TextClock) findViewById(R.id.date_field)).getText().toString();
-        int     catID = 0, begBal = 0, cLevel = 0;
+        int     catID = 0, destID = 0, begBal = 0, cLevel = 0;
 
         try{
-            catID       = ((Spinner)findViewById(R.id.spinnerCategory)).getSelectedItemPosition();
+            catID       = (int) ((Spinner)findViewById(R.id.spinnerCategory)).getSelectedItemId();
+            destID      = (int) ((Spinner)findViewById(R.id.spinnerDestination)).getSelectedItemId();
             begBal      = Integer.parseInt( ((EditText) findViewById(R.id.etBal)).getText().toString() );
             cLevel      = Integer.parseInt( ((EditText) findViewById(R.id.etCriticalLevel)).getText().toString() );
         }catch(NumberFormatException e){
@@ -248,7 +256,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         try{
-            controller.addStock( code, stockName, unit, catID, cLevel, begBal, date);
+            controller.addStock( code, stockName, unit, catID, destID, cLevel, begBal, date);
             Toast.makeText(MainActivity.this, "ADDED NEW STOCK \""+stockName+"\"", Toast.LENGTH_SHORT).show();
         }catch(SQLiteException e){
             Toast.makeText(MainActivity.this, "ALREADY EXISTS", Toast.LENGTH_SHORT).show();
@@ -263,6 +271,17 @@ public class MainActivity extends AppCompatActivity
         try{
             controller.addCategory(name);
             Toast.makeText(MainActivity.this, "ADDED NEW CATEGORY \""+name+"\"", Toast.LENGTH_SHORT).show();
+        }catch(SQLiteException e){
+            Toast.makeText(MainActivity.this, "ALREADY EXISTS", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void btn_addNewDestination(View view){
+        controller = new DB_Controller(this, "", null, 1);
+        String  name = ((EditText) findViewById(R.id.etDestName)).getText().toString();
+        try{
+            controller.addDestination(name);
+            Toast.makeText(MainActivity.this, "ADDED NEW DESTINATION \""+name+"\"", Toast.LENGTH_SHORT).show();
         }catch(SQLiteException e){
             Toast.makeText(MainActivity.this, "ALREADY EXISTS", Toast.LENGTH_SHORT).show();
         }

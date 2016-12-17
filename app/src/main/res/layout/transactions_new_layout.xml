@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:textSize="20dp"
             android:textStyle="bold"
-            android:hint="ENTER PRODUCT CODE"
+            android:hint="ENTER/SCAN PRODUCT CODE"
             android:nextFocusDown="@+id/trans_quantity"
             android:inputType="text"
             android:maxLines="1"
@@ -60,6 +60,8 @@
                 android:layout_height="wrap_content"
                 android:textSize="20dp"
                 android:id="@+id/curBal"
+                android:background="#EFEFEF"
+                android:paddingLeft="10dp"
                 android:text="BALANCE"/>
             <TextView
                 android:layout_width="match_parent"
@@ -67,6 +69,8 @@
                 android:layout_marginRight="10dp"
                 android:text="0"
                 android:textSize="20dp"
+                android:background="#EFEFEF"
+                android:paddingRight="10dp"
                 android:id="@+id/trans_curBal"/>
         </TableRow>
     </TableLayout>

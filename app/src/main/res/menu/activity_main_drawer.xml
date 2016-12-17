@@ -37,13 +37,17 @@
         android:checkableBehavior="single">
 
         <item
-            android:id="@+id/nav_category"
+            android:id="@+id/nav_catNdest"
             android:icon="@drawable/ic_category"
-            android:title="Categories" />
+            android:title="Categories &amp; Destinations" />
         <item
             android:id="@+id/nav_newCategory"
             android:icon="@drawable/ic_category_new"
             android:title="Add New Category" />
+        <item
+            android:id="@+id/nav_newDestination"
+            android:icon="@drawable/ic_destination"
+            android:title="Add New Destination" />
     </group>
 
     <group
