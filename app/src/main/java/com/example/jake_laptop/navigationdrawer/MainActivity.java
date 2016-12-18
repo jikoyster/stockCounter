@@ -251,18 +251,27 @@ public class MainActivity extends AppCompatActivity
             destID      = (int) ((Spinner)findViewById(R.id.spinnerDestination)).getSelectedItemId();
             begBal      = Integer.parseInt( ((EditText) findViewById(R.id.etBal)).getText().toString() );
             cLevel      = Integer.parseInt( ((EditText) findViewById(R.id.etCriticalLevel)).getText().toString() );
-        }catch(NumberFormatException e){
-            Toast.makeText(MainActivity.this, "WRONG FORMAT", Toast.LENGTH_SHORT).show();
-        }
 
-        try{
             controller.addStock( code, stockName, unit, catID, destID, cLevel, begBal, date);
             Toast.makeText(MainActivity.this, "ADDED NEW STOCK \""+stockName+"\"", Toast.LENGTH_SHORT).show();
-        }catch(SQLiteException e){
+            clearStockFom(view);
+        } catch(NumberFormatException e){
+            Toast.makeText(MainActivity.this, "Please fill in the form completely.", Toast.LENGTH_SHORT).show();
+        } catch(SQLiteException e){
             Toast.makeText(MainActivity.this, "ALREADY EXISTS", Toast.LENGTH_SHORT).show();
-        }catch(NullPointerException e){
+        } catch(NullPointerException e){
             Toast.makeText(MainActivity.this, "NullPointerException", Toast.LENGTH_SHORT).show();
         }
+
+
+    }
+
+    public void clearStockFom(View view){
+        ((EditText)findViewById(R.id.etCode)).setText("");
+        ((EditText) findViewById(R.id.etName)).setText("");
+        ((EditText) findViewById(R.id.etUnit)).setText("");
+        ((EditText) findViewById(R.id.etBal)).setText("");
+        ((EditText) findViewById(R.id.etCriticalLevel)).setText("");
     }
 
     public void btn_addNewCategory(View view){
@@ -274,6 +283,8 @@ public class MainActivity extends AppCompatActivity
         }catch(SQLiteException e){
             Toast.makeText(MainActivity.this, "ALREADY EXISTS", Toast.LENGTH_SHORT).show();
         }
+
+        ((EditText) findViewById(R.id.etCatName)).setText("");
     }
 
     public void btn_addNewDestination(View view){
@@ -285,6 +296,8 @@ public class MainActivity extends AppCompatActivity
         }catch(SQLiteException e){
             Toast.makeText(MainActivity.this, "ALREADY EXISTS", Toast.LENGTH_SHORT).show();
         }
+
+        ((EditText) findViewById(R.id.etDestName)).setText("");
     }
 
 }//class

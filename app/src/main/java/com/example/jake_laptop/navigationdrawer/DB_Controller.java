@@ -1,6 +1,7 @@
 package com.example.jake_laptop.navigationdrawer;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -170,56 +171,43 @@ public class DB_Controller extends SQLiteOpenHelper {
         return flag;
     }
 
-    public void displayStocks(final TableLayout tableLayout) {
+    public void displayStocks(TableLayout tableLayout){
+        displayStocks(tableLayout, "");
+    }
+
+    public int intID = 0;
+    public void displayStocks(final TableLayout tableLayout, String where) {
         tableLayout.removeAllViews();
-        Cursor cursor = this.getReadableDatabase().rawQuery("SELECT * FROM "+ tbl_stocks +" ORDER BY NAME ASC ;", null);
+        Cursor cursor = null;
+
+        if (where.isEmpty()) {
+            cursor = this.getReadableDatabase().rawQuery("SELECT * FROM " + tbl_stocks + " ORDER BY NAME ASC ;", null);
+        }else{
+            cursor = this.getReadableDatabase().rawQuery("SELECT * FROM " + tbl_stocks + " "+ where +" ORDER BY NAME ASC ;", null);
+        }
+
 //        view.setText("");
 //        setStockHeader(tableLayout);
-        int intID = 0;
+
+
+        intID = 0;
         while(cursor.moveToNext()){
 //            view.append(cursor.getString(1)+"  "+cursor.getString(2)+"\n");
             TableRow row = new TableRow(tableLayout.getContext());
             row.setMinimumHeight(200);
             row.setLongClickable(true);
 
-            row.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(final View v) {
-                    v.setBackgroundColor(Color.LTGRAY);
-
-                    AlertDialog.Builder innerBuilder = new AlertDialog.Builder(v.getContext());
-                    innerBuilder.setMessage("DELETING THIS RECORD!:\nAre you sure?");
-
-                    final String oldCode = ((Button)v.findViewWithTag("code")).getText().toString();
-                    innerBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            getWritableDatabase().execSQL("DELETE FROM "+ tbl_stocks +" WHERE CODE='"+ oldCode +"';");
-                            displayStocks(tableLayout);
-                        }
-                    });
-                    innerBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            v.setBackgroundColor(Color.WHITE);
-                        }
-                    });
-                    innerBuilder.show();
-
-                    return false;
-                }
-            });
 
             //GET AND SET STOCK INFOs to Stocks Management Layout
             //CODE
             TextView lblCode = new TextView(tableLayout.getContext());
             lblCode.setText("Code: ");
-            final Button code = new Button(tableLayout.getContext());
+            Button code = new Button(tableLayout.getContext());
             code.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             code.setWidth(LinearLayout.LayoutParams.MATCH_PARENT);
             code.setTextSize(20);
             code.setText(cursor.getString(0));
-            code.setTag("code");
+            code.setTag("code"+intID);
 
             //NAME
             TextView lblName = new TextView(tableLayout.getContext());
@@ -228,6 +216,7 @@ public class DB_Controller extends SQLiteOpenHelper {
             name.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
             name.setTypeface(null, Typeface.BOLD);
             name.setTextSize(25);
+            name.setTag("name");
             name.setText(cursor.getString(1));
 
             //UNIT
@@ -271,6 +260,17 @@ public class DB_Controller extends SQLiteOpenHelper {
             bal.setTypeface(null, Typeface.BOLD);
             bal.setText( cursor.getString(6) );
 
+
+            row.setOnLongClickListener(new View.OnLongClickListener() {
+
+                @Override
+                public boolean onLongClick(final View v) {
+
+
+                    return false;
+                }
+            });
+
             /* code set setOnClickListener */
             code.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -294,6 +294,7 @@ public class DB_Controller extends SQLiteOpenHelper {
 
                     final AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
 //                    builder.setTitle("Update Stock Info: "+ oldCode);
+
 
                     LayoutInflater inflater = LayoutInflater.from(v.getContext());
                     View updateView = inflater.inflate(R.layout.stocks_update_editor_layout, null);
@@ -399,13 +400,41 @@ public class DB_Controller extends SQLiteOpenHelper {
                         }
                     });//builder.setNegativeButton
 
+                    builder.setItems(new CharSequence[]{"X DELETE THIS ITEM"}, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+//                            System.out.println("delete process");
+                            AlertDialog.Builder innerBuilder = new AlertDialog.Builder(builder.getContext());
+
+//                    TableRow tblRow = (TableRow)tableLayout.findViewById(intID);
+//                    Button btnCode = (Button)tblRow.findViewById( Integer.parseInt(intID+"0") );
+//                    String currentRecord = btnCode.getText().toString();
+//                            final String oldCode = ((Button)v.findViewWithTag("code"+intID)).getText().toString();
+                            innerBuilder.setMessage("DELETING THIS RECORD! \nARE YOU SURE?");
+
+
+
+                            innerBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    getWritableDatabase().execSQL("DELETE FROM "+ tbl_stocks +" WHERE CODE='"+ oldCode +"';");
+                                    displayStocks(tableLayout);
+                                }
+                            });
+                            innerBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            });
+                            innerBuilder.show();
+                        }
+                    });
+
                     builder.setNeutralButton("CANCEL", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-
                         }
                     });//builder.setNeutralButton
-
 
 
                     builder.show();
@@ -459,10 +488,9 @@ public class DB_Controller extends SQLiteOpenHelper {
             tableLayout.addView( row5 );
             tableLayout.addView( Hline );
 
-
             intID++;
         }//endwhile
-    }
+    }//displayStocks
 
     public void add_newTransaction(String trans_PCode, String trans_type, int trans_quantity, String trans_date){
         String insertTransactionSQL = "INSERT INTO "+tbl_transactions+"" +
@@ -847,7 +875,7 @@ public class DB_Controller extends SQLiteOpenHelper {
         List<String> labels = populateCategories();
         // Creating adapter for spinner
         ArrayAdapter<String> dataAdapter =
-                new ArrayAdapter<String>(view.getContext(),android.R.layout.simple_spinner_item, labels);
+                new ArrayAdapter<String>(view.getContext(),R.layout.spinner_item, labels);
         // Drop down layout style - list view with radio button
         dataAdapter.setDropDownViewResource(android.R.layout.select_dialog_singlechoice);//simple_spinner_dropdown_item);
 
@@ -910,7 +938,7 @@ public class DB_Controller extends SQLiteOpenHelper {
         List<String> labels = populateDestinations();
         // Creating adapter for spinner
         ArrayAdapter<String> dataAdapter =
-                new ArrayAdapter<String>(view.getContext(),android.R.layout.simple_spinner_item, labels);
+                new ArrayAdapter<String>(view.getContext(),R.layout.spinner_item, labels);
         // Drop down layout style - list view with radio button
         dataAdapter.setDropDownViewResource(android.R.layout.select_dialog_singlechoice);//simple_spinner_dropdown_item);
 
@@ -1063,11 +1091,10 @@ public class DB_Controller extends SQLiteOpenHelper {
                         }
                     });//Delete Record
 
-                    checkTrans.setNegativeButton("Cancel Transaction", new DialogInterface.OnClickListener() {
+                    checkTrans.setNegativeButton("Close", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            //CANCEL A TRANSACTION AND RETURN THE QUANTITY TO THE STOCK'S BALANCE
-                            //THEN DELETE THE RECORD
+
                         }
                     });
                     checkTrans.show();

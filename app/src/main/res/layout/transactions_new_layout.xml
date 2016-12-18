@@ -7,23 +7,66 @@
     android:background="#FFFFFF"
     android:id="@+id/transactions_new_layout">
 
+    <!-- FRAGMENT -->
+
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:hint="ENTER/SCAN PRODUCT CODE"
+        android:nextFocusDown="@+id/trans_quantity"
+        android:inputType="text"
+        android:maxLines="1"
+        android:id="@+id/trans_PCode"/>
 
     <TableRow
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <EditText
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:text="Name: "
+            android:id="@+id/trans_lblPName"/>
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="20dp"
             android:textStyle="bold"
-            android:hint="ENTER/SCAN PRODUCT CODE"
-            android:nextFocusDown="@+id/trans_quantity"
-            android:inputType="text"
-            android:maxLines="1"
-            android:id="@+id/trans_PCode"/>
+            android:text="Stock Name "
+            android:id="@+id/trans_PName"/>
     </TableRow>
 
-
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:id="@+id/trans_lblcurBal"
+            android:background="#EFEFEF"
+            android:textColor="#009900"
+            android:padding="5dp"
+            android:text="BALANCE: "/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="10dp"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            android:background="#EFEFEF"
+            android:textColor="#009900"
+            android:padding="5dp"
+            android:id="@+id/trans_curBal"
+            android:text="0"/>
+    </TableRow>
 
     <TableLayout
         android:layout_width="wrap_content"
@@ -55,23 +98,7 @@
                     android:text="OUT" />
             </RadioGroup>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:id="@+id/curBal"
-                android:background="#EFEFEF"
-                android:paddingLeft="10dp"
-                android:text="BALANCE"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:text="0"
-                android:textSize="20dp"
-                android:background="#EFEFEF"
-                android:paddingRight="10dp"
-                android:id="@+id/trans_curBal"/>
+
         </TableRow>
     </TableLayout>
 

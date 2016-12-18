@@ -18,6 +18,8 @@ import android.widget.TextClock;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
+
 
 /**
  * Created by Jake-LAPTOP on 12/2/2016.
@@ -51,8 +53,11 @@ public class TransactionsNewFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String name = controller.getValueFromColumn("NAME", s.toString());
                 String bal = controller.getValueFromColumn("BALANCE", s.toString());
-                System.out.println( bal );
+
+                TextView trans_PName = (TextView)myView.findViewById(R.id.trans_PName);
+                trans_PName.setText(name);
 
                 TextView trans_curBal = (TextView)myView.findViewById(R.id.trans_curBal);
                 trans_curBal.setText(bal);
@@ -70,17 +75,21 @@ public class TransactionsNewFragment extends Fragment {
             String trans_type = null;
             int trans_quantity = -1;
 
-            EditText ETtrans_PCode = (EditText) myView.findViewById(R.id.trans_PCode);
-            String trans_PCode = ETtrans_PCode.getText().toString();
+            try{
+                EditText ETtrans_PCode = (EditText) myView.findViewById(R.id.trans_PCode);
+                String trans_PCode = ETtrans_PCode.getText().toString();
 
-            RadioGroup radioGroup = (RadioGroup)myView.findViewById(R.id.trans_type_group);
-            int checkedId = radioGroup.getCheckedRadioButtonId();
-            trans_type = ((RadioButton)myView.findViewById(checkedId)).getText().toString();
+                if (trans_PCode.isEmpty())
+                    throw new IOException();
 
-            String strQty = ((EditText) myView.findViewById(R.id.trans_quantity)).getText().toString();
-            trans_quantity = Integer.parseInt(strQty);
+                RadioGroup radioGroup = (RadioGroup)myView.findViewById(R.id.trans_type_group);
+                int checkedId = radioGroup.getCheckedRadioButtonId();
+                trans_type = ((RadioButton)myView.findViewById(checkedId)).getText().toString();
+                String strQty = ((EditText) myView.findViewById(R.id.trans_quantity)).getText().toString();
+                trans_quantity = Integer.parseInt(strQty);
 
-            final String trans_date = ((TextClock)myView.findViewById(R.id.trans_date)).getText().toString();
+
+                final String trans_date = ((TextClock)myView.findViewById(R.id.trans_date)).getText().toString();
 
                 System.out.println(trans_PCode);
                 System.out.println(trans_type);
@@ -91,8 +100,22 @@ public class TransactionsNewFragment extends Fragment {
                 controller.updateStockBalance(myView, trans_PCode, trans_type, trans_quantity);
 
                 Toast.makeText(myView.getContext(), "Transaction Recorded!", Toast.LENGTH_SHORT).show();
+
+                ((EditText) myView.findViewById(R.id.trans_PCode)).setText("");
+                ((TextView) myView.findViewById(R.id.trans_PName)).setText("");
+                ((TextView) myView.findViewById(R.id.trans_curBal)).setText("");
+                ((EditText) myView.findViewById(R.id.trans_quantity)).setText("");
+
+            } catch (IOException e) {
+                Toast.makeText(myView.getContext(), "Enter/Scan Product Code", Toast.LENGTH_SHORT).show();
+            } catch (NumberFormatException nfe){
+                Toast.makeText(myView.getContext(), "Invalid quantity for this transaction", Toast.LENGTH_SHORT).show();
+            } catch (NullPointerException npe){
+                Toast.makeText(myView.getContext(), "Enter the type of transaction to be performed", Toast.LENGTH_SHORT).show();
+            }
             }
         });
+
 
         return myView;
     }

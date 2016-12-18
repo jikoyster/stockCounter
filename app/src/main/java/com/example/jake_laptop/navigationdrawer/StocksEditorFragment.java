@@ -22,6 +22,8 @@ public class StocksEditorFragment extends Fragment {
     DB_Controller controller;
     View myView;
 
+    Spinner spinnerCategory, spinnerDestination;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -34,27 +36,27 @@ public class StocksEditorFragment extends Fragment {
     }
 
     public void loadCategories(){
-        Spinner spinnerCategory = (Spinner) myView.findViewById(R.id.spinnerCategory);
+        spinnerCategory = (Spinner) myView.findViewById(R.id.spinnerCategory);
 
         List<String> labels = controller.populateCategories();
         // Creating adapter for spinner
         ArrayAdapter<String> dataAdapter =
-                new ArrayAdapter<String>(myView.getContext(),android.R.layout.simple_spinner_item, labels);
+                new ArrayAdapter<String>(myView.getContext(),R.layout.spinner_item, labels);
         // Drop down layout style - list view with radio button
-        dataAdapter.setDropDownViewResource(android.R.layout.select_dialog_item);//simple_spinner_dropdown_item);
+        dataAdapter.setDropDownViewResource(android.R.layout.select_dialog_singlechoice);//simple_spinner_dropdown_item);
 
         spinnerCategory.setAdapter(dataAdapter);
     }//loadCategories
 
     public void loadDestinations(){
-        Spinner spinnerDestination = (Spinner) myView.findViewById(R.id.spinnerDestination);
+        spinnerDestination = (Spinner) myView.findViewById(R.id.spinnerDestination);
 
         List<String> labels = controller.populateDestinations();
         // Creating adapter for spinner
         ArrayAdapter<String> dataAdapter =
-                new ArrayAdapter<String>(myView.getContext(),android.R.layout.simple_spinner_item, labels);
+                new ArrayAdapter<String>(myView.getContext(),R.layout.spinner_item, labels);
         // Drop down layout style - list view with radio button
-        dataAdapter.setDropDownViewResource(android.R.layout.select_dialog_item);//simple_spinner_dropdown_item);
+        dataAdapter.setDropDownViewResource(android.R.layout.select_dialog_singlechoice);//simple_spinner_dropdown_item);
 
         spinnerDestination.setAdapter(dataAdapter);
     }//loadCategories
