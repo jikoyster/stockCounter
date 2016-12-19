@@ -27,6 +27,10 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextClock;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.firebase.FirebaseOptions;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +40,8 @@ import java.util.List;
  */
 
 public class DB_Controller extends SQLiteOpenHelper {
+
+
 
     //    Notification variables
     public static NotificationManager NM;
@@ -49,7 +55,9 @@ public class DB_Controller extends SQLiteOpenHelper {
 
     public DB_Controller(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         //be sure database name "TEST.db" has extension .db
-        super(context, "TEST027.db", factory, version);
+//        super(context, "TEST027.db", factory, version);
+        super(context, "stockcounter-8831b", factory, version);
+        Toast.makeText(context, getReadableDatabase().getPath() , Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -1203,7 +1211,7 @@ public class DB_Controller extends SQLiteOpenHelper {
             critcalLevel.setTextSize(16);
             critcalLevel.setPadding(30,0,0,0);
             critcalLevel.setTypeface(null, Typeface.BOLD);
-            critcalLevel.setText( cursor.getString(4) );
+            critcalLevel.setText( cursor.getString(5) );
 
             //BAL
             TextView lblBalance = new TextView(tableLayout.getContext());
@@ -1214,7 +1222,7 @@ public class DB_Controller extends SQLiteOpenHelper {
             bal.setTextSize(16);
             bal.setPadding(30,0,0,0);
             bal.setTypeface(null, Typeface.BOLD);
-            bal.setText( cursor.getString(5) );
+            bal.setText( cursor.getString(6) );
 
             /* code set setOnClickListener */
             code.setOnClickListener(new View.OnClickListener() {
@@ -1230,7 +1238,7 @@ public class DB_Controller extends SQLiteOpenHelper {
                     final String bal = getValueFromColumn("BALANCE", oldCode);
 
                     final AlertDialog.Builder tBuilder = new AlertDialog.Builder(v.getContext());
-                    tBuilder.setTitle("New Transaction");
+                    tBuilder.setTitle("Update Stock");
 
 
                     LayoutInflater inflater = LayoutInflater.from(v.getContext());
@@ -1238,6 +1246,8 @@ public class DB_Controller extends SQLiteOpenHelper {
 
                     TextView pcode = (TextView) transactionView.findViewById(R.id.trans_PCode);
                     pcode.setText(oldCode);
+                    TextView pname = (TextView) transactionView.findViewById(R.id.trans_PName);
+                    pname.setText(name);
                     //type no needed to display by default
                     TextView curBal = (TextView) transactionView.findViewById(R.id.curBal);
                     curBal.setTextColor(Color.parseColor("#009900"));
@@ -1256,7 +1266,8 @@ public class DB_Controller extends SQLiteOpenHelper {
 
                     //get RadioButton value on submit
                     final RadioGroup radioGroup = (RadioGroup) transactionView.findViewById(R.id.trans_type_group);
-                    radioGroup.check(R.id.OUT);
+                    radioGroup.check(R.id.IN);
+                    ((RadioButton)transactionView.findViewById(R.id.OUT)).setVisibility(View.INVISIBLE);
 
                     tBuilder.setPositiveButton("SUBMIT", new DialogInterface.OnClickListener() {
                         @Override
@@ -1288,6 +1299,13 @@ public class DB_Controller extends SQLiteOpenHelper {
                             displayCLStocks(tableLayout);
                         }
 
+                    });
+
+                    tBuilder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
                     });
 
                     tBuilder.show();
