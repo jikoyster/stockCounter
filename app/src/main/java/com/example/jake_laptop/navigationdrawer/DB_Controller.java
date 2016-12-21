@@ -355,6 +355,8 @@ public class DB_Controller extends SQLiteOpenHelper {
 
                             TextView pcode = (TextView)transactionView.findViewById(R.id.trans_PCode);
                             pcode.setText(oldCode);
+                            TextView pname = (TextView)transactionView.findViewById(R.id.trans_PName);
+                            pname.setText(name);
                             //type no needed to display by default
                             TextView curBal = (TextView)transactionView.findViewById(R.id.curBal);
                             curBal.setTextColor( Color.parseColor("#009900") );

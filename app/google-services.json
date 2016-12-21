@@ -1,27 +1,35 @@
 {
   "project_info": {
-    "project_number": "685538668195",
-    "firebase_url": "https://stockcounter-8831b.firebaseio.com",
-    "project_id": "stockcounter-8831b",
-    "storage_bucket": "stockcounter-8831b.appspot.com"
+    "project_number": "359990842256",
+    "firebase_url": "https://navigationdrawer-d0d0b.firebaseio.com",
+    "project_id": "navigationdrawer-d0d0b",
+    "storage_bucket": "navigationdrawer-d0d0b.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:685538668195:android:e51a6b838348a8e0",
+        "mobilesdk_app_id": "1:359990842256:android:30260f07ab9598f4",
         "android_client_info": {
           "package_name": "com.example.jake_laptop.navigationdrawer"
         }
       },
       "oauth_client": [
         {
-          "client_id": "685538668195-k23b1k9dv0i95kn8et35hddhdrem41h0.apps.googleusercontent.com",
+          "client_id": "359990842256-6n6frncmerlechgj27frpae6bf8l7aj2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.jake_laptop.navigationdrawer",
+            "certificate_hash": "D90778B72BBF9A274653D42CBF004A260DB6FCDF"
+          }
+        },
+        {
+          "client_id": "359990842256-n7kkd14u3r6vlbh77eau0ns55osbna04.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBVIFmCMf25AvQJK8yWtXrIriwmHWlQGnU"
+          "current_key": "AIzaSyBFnqEswUR6Q5yML10T7CLRJcqKulsCXTY"
         }
       ],
       "services": {
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "359990842256-n7kkd14u3r6vlbh77eau0ns55osbna04.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

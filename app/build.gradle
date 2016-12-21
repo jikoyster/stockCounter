@@ -32,3 +32,6 @@ dependencies {
 
 // Add to the bottom of the file
 apply plugin: 'com.google.gms.google-services'
+dependencies {
+    compile 'com.google.firebase:firebase-core'
+}
