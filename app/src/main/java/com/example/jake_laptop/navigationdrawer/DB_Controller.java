@@ -13,6 +13,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.NotificationCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -223,6 +224,7 @@ public class DB_Controller extends SQLiteOpenHelper {
             TextView name = new TextView(tableLayout.getContext());
             name.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
             name.setTypeface(null, Typeface.BOLD);
+            name.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
             name.setTextSize(25);
             name.setTag("name");
             name.setText(cursor.getString(1));
